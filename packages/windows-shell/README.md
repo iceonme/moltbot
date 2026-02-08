@@ -10,13 +10,19 @@ Electron shell for a simplified Windows desktop experience:
 ## First run
 
 1. Install Moltbot CLI (`moltbot` must be on `PATH`) or set `MOLTBOT_BIN`.
-2. Run:
+2. Provide Electron via PATH (e.g. `electron`) or set `MOLTBOT_ELECTRON_BIN`.
+3. Run:
 
 ```bash
 pnpm --filter @moltbot/windows-shell start
 ```
 
-3. Edit `~/.clawdbot/.env` and set `OPENROUTER_API_KEY`.
+4. Edit `~/.clawdbot/.env` and set `OPENROUTER_API_KEY`.
+
+## Why this package has no npm dependencies
+
+Some environments block direct fetches from `registry.npmjs.org`.
+This package avoids hard dependencies so workspace installs can still succeed in restricted environments.
 
 ## Notes
 

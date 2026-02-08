@@ -383,12 +383,12 @@ importers:
       '@microsoft/agents-hosting-extensions-teams':
         specifier: ^1.2.2
         version: 1.2.2
-      moltbot:
-        specifier: workspace:*
-        version: link:../..
       express:
         specifier: ^5.2.1
         version: 5.2.1
+      moltbot:
+        specifier: workspace:*
+        version: link:../..
       proper-lockfile:
         specifier: ^4.1.2
         version: 4.1.2
@@ -480,6 +480,8 @@ importers:
       moltbot:
         specifier: workspace:*
         version: link:../..
+
+  packages/windows-shell: {}
 
   ui:
     dependencies:

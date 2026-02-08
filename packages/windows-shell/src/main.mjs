@@ -4,8 +4,8 @@ import { createWriteStream, existsSync, mkdirSync, readFileSync, writeFileSync }
 import { homedir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { spawn, type ChildProcess } from "node:child_process";
-import { defaultConfigTemplate } from "./config-template.js";
+import { spawn } from "node:child_process";
+import { defaultConfigTemplate } from "./config-template.mjs";
 
 const GATEWAY_URL = "http://127.0.0.1:18789/";
 const STATE_DIR = join(homedir(), ".clawdbot");
@@ -14,14 +14,14 @@ const ENV_PATH = join(STATE_DIR, ".env");
 const LOG_PATH = join(STATE_DIR, "gateway-electron.log");
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-let mainWindow: BrowserWindow | null = null;
-let gatewayProcess: ChildProcess | null = null;
+let mainWindow = null;
+let gatewayProcess = null;
 
-function ensureParentDir(filePath: string): void {
+function ensureParentDir(filePath) {
   mkdirSync(dirname(filePath), { recursive: true });
 }
 
-function ensureEnvFile(): Record<string, string> {
+function ensureEnvFile() {
   ensureParentDir(ENV_PATH);
   if (!existsSync(ENV_PATH)) {
     const token = randomBytes(24).toString("hex");
@@ -33,32 +33,25 @@ function ensureEnvFile(): Record<string, string> {
   }
 
   const envLines = readFileSync(ENV_PATH, "utf8").split(/\r?\n/);
-  const envVars: Record<string, string> = {};
+  const envVars = {};
   for (const line of envLines) {
-    if (!line || line.startsWith("#")) {
-      continue;
-    }
+    if (!line || line.startsWith("#")) continue;
     const separator = line.indexOf("=");
-    if (separator < 1) {
-      continue;
-    }
+    if (separator < 1) continue;
     envVars[line.slice(0, separator)] = line.slice(separator + 1);
   }
   return envVars;
 }
 
-function ensureConfigFile(): void {
+function ensureConfigFile() {
   ensureParentDir(CONFIG_PATH);
-  if (existsSync(CONFIG_PATH)) {
-    return;
+  if (!existsSync(CONFIG_PATH)) {
+    writeFileSync(CONFIG_PATH, defaultConfigTemplate, "utf8");
   }
-  writeFileSync(CONFIG_PATH, defaultConfigTemplate, "utf8");
 }
 
-function startGateway(): void {
-  if (gatewayProcess && !gatewayProcess.killed) {
-    return;
-  }
+function startGateway() {
+  if (gatewayProcess && !gatewayProcess.killed) return;
 
   const extraEnv = ensureEnvFile();
   ensureConfigFile();
@@ -79,21 +72,19 @@ function startGateway(): void {
   });
 }
 
-function stopGateway(): void {
-  if (!gatewayProcess) {
-    return;
-  }
+function stopGateway() {
+  if (!gatewayProcess) return;
   gatewayProcess.kill();
   gatewayProcess = null;
 }
 
-function createWindow(): void {
+function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1280,
     height: 860,
     autoHideMenuBar: true,
     webPreferences: {
-      preload: join(__dirname, "preload.js")
+      preload: join(__dirname, "preload.mjs")
     }
   });
 
@@ -105,9 +96,7 @@ function createWindow(): void {
       submenu: [
         {
           label: "Open Logs Folder",
-          click: async () => {
-            await shell.openPath(STATE_DIR);
-          }
+          click: async () => shell.openPath(STATE_DIR)
         },
         {
           label: "Restart Gateway",
@@ -139,9 +128,7 @@ app.whenReady().then(() => {
 });
 
 app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
-    app.quit();
-  }
+  if (process.platform !== "darwin") app.quit();
 });
 
 app.on("before-quit", () => {

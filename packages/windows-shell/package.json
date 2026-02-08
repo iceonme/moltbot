@@ -1,19 +1,11 @@
 {
   "name": "@moltbot/windows-shell",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "private": true,
   "description": "Windows x64 Electron shell for local Moltbot gateway",
-  "main": "dist/main.js",
+  "main": "src/main.mjs",
   "type": "module",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "start": "pnpm build && electron dist/main.js"
-  },
-  "dependencies": {
-    "electron": "^37.4.0"
-  },
-  "devDependencies": {
-    "@types/node": "^24.6.0",
-    "typescript": "^5.9.3"
+    "start": "node src/launch.mjs"
   }
 }
