@@ -1,0 +1,56 @@
+{
+  "name": "tixbot",
+  "version": "1.0.0",
+  "description": "TIXBOT",
+  "author": "TIXBOT Team",
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder build --windows"
+  },
+  "build": {
+    "asar": false,
+    "appId": "com.tixbot.app",
+    "productName": "TIXBOT",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.cjs",
+      "package.json",
+      "../../dist/**/*",
+      "../../openclaw.mjs",
+      "../../package.json",
+      "../../skills/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "../../dist",
+        "to": "dist"
+      },
+      {
+        "from": "../../openclaw.mjs",
+        "to": "openclaw.mjs"
+      },
+      {
+        "from": "../../package.json",
+        "to": "package.json"
+      },
+      {
+        "from": "../../skills",
+        "to": "skills"
+      }
+    ],
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false
+    }
+  },
+  "devDependencies": {
+    "electron": "^33.4.11",
+    "electron-builder": "^24.13.3"
+  }
+}

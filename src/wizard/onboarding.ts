@@ -92,8 +92,9 @@ export async function runOnboardingWizard(
   prompter: WizardPrompter,
 ) {
   printWizardHeader(runtime);
-  await prompter.intro("OpenClaw onboarding");
-  await requireRiskAcknowledgement({ opts, prompter });
+  await prompter.intro("欢迎使用 TIXBOT 智能票务助手");
+  // 移除风险确认环节，简化流程
+  // await requireRiskAcknowledgement({ opts, prompter });
 
   const snapshot = await readConfigFileSnapshot();
   let baseConfig: OpenClawConfig = snapshot.valid ? snapshot.config : {};
@@ -134,16 +135,7 @@ export async function runOnboardingWizard(
     normalizedExplicitFlow === "quickstart" || normalizedExplicitFlow === "advanced"
       ? normalizedExplicitFlow
       : undefined;
-  let flow: WizardFlow =
-    explicitFlow ??
-    (await prompter.select({
-      message: "Onboarding mode",
-      options: [
-        { value: "quickstart", label: "QuickStart", hint: quickstartHint },
-        { value: "advanced", label: "Manual", hint: manualHint },
-      ],
-      initialValue: "quickstart",
-    }));
+  let flow: WizardFlow = explicitFlow ?? "quickstart";
 
   if (opts.mode === "remote" && flow === "quickstart") {
     await prompter.note(

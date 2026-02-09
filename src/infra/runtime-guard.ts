@@ -77,6 +77,9 @@ export function assertSupportedRuntime(
   runtime: RuntimeEnv = defaultRuntime,
   details: RuntimeDetails = detectRuntime(),
 ): void {
+  if (process.env.OPENCLAW_SKIP_RUNTIME_GUARD === "1") {
+    return;
+  }
   if (runtimeSatisfies(details)) {
     return;
   }

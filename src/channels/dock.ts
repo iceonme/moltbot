@@ -88,7 +88,7 @@ const escapeRegExp = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\
 // Adding a channel:
 // - add a new entry to `DOCKS`
 // - keep it cheap; push heavy logic into `src/channels/plugins/<id>.ts` or channel modules
-const DOCKS: Record<ChatChannelId, ChannelDock> = {
+const DOCKS: Record<ChannelId, ChannelDock> = {
   telegram: {
     id: "telegram",
     capabilities: {

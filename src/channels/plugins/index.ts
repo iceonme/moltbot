@@ -29,7 +29,8 @@ function dedupeChannels(channels: ChannelPlugin[]): ChannelPlugin[] {
 }
 
 export function listChannelPlugins(): ChannelPlugin[] {
-  const combined = dedupeChannels(listPluginChannels());
+  const mainlandChannels = ["whatsapp", "bluebubbles", "unifiedpush"]; // 仅保留核心及可能相关的
+  const combined = dedupeChannels(listPluginChannels()).filter(c => mainlandChannels.includes(c.id));
   return combined.toSorted((a, b) => {
     const indexA = CHAT_CHANNEL_ORDER.indexOf(a.id as ChatChannelId);
     const indexB = CHAT_CHANNEL_ORDER.indexOf(b.id as ChatChannelId);
@@ -56,12 +57,6 @@ export function normalizeChannelId(raw?: string | null): ChannelId | null {
   return normalizeAnyChannelId(raw);
 }
 export {
-  listDiscordDirectoryGroupsFromConfig,
-  listDiscordDirectoryPeersFromConfig,
-  listSlackDirectoryGroupsFromConfig,
-  listSlackDirectoryPeersFromConfig,
-  listTelegramDirectoryGroupsFromConfig,
-  listTelegramDirectoryPeersFromConfig,
   listWhatsAppDirectoryGroupsFromConfig,
   listWhatsAppDirectoryPeersFromConfig,
 } from "./directory-config.js";
